@@ -1,39 +1,52 @@
-# <h1 align="center">goal-tracker</h1>
-code name: <h1 align="center">Project-atlas</h1>
+# Goal Tracker
+**Code name:** Project Atlas
 
-A web platform that helps people organize personal and professional goals, breaking down big objectives into small steps, tracking real progress and encouraging continuous reflection.
+A web platform that helps people organize personal and professional goals by breaking down big objectives into small steps, tracking real progress, and encouraging continuous reflection.
 
-The goal of this project is solve a pain that many peoples had and me too, that is define goals and create a more realistc and efficient path for your dreams.
+This project was born from a real personal pain: the difficulty of defining goals and creating a realistic, efficient path to achieve them.
 
-### 🛠 Stack
+---
 
-- Front-end: React + TypeScript + TailwindCSS
-- Back-end: Node.js
-- DB: PostgreSQL
-- Authentication: JWL
-- Deploy: to be defined 
+## 🛠 Tech Stack
+- **Front-end:** React + TypeScript + TailwindCSS  
+- **Back-end:** Node.js  
+- **Database:** PostgreSQL  
+- **Authentication:** JWT  
+- **Deploy:** To be defined  
 
+---
 
-Version 1.0  Still in development
+## 🚀 Current Status
+**Version:** 1.0  
+**Status:** In development
 
-# Version log:
-- Sign in and log in;
-- Split goals
+---
+
+## 📌 Planned Features (v1)
+- User authentication (sign up / login)
 - Create goals
-- Check progress
-- Dashboard
+- Split goals into smaller steps
+- Track progress
+- Simple dashboard
 
-# How to Use
+---
 
-Coming Soon
+## 📖 How to Use
+Coming soon.
 
-# Contributing
-Feel free to help me in this project, i am thankful for any contribuition 
+---
 
-# Contact
+## 🤝 Contributing
+Contributions are welcome!  
+Feel free to open issues, suggest improvements, or submit pull requests.
 
-Email:  lucasabrisolla@gmail.com
-Whatsapp: +55(14)99125-2831
+---
 
-# License
-project-atlas is <a href="https://github.com/lucas-brisolla/goal-tracker/blob/main/LICENSE">MIT Licensed</a>
+## 📬 Contact
+- Email: lucasabrisolla@gmail.com  
+- WhatsApp: +55 (14) 99125-2831  
+
+---
+
+## 📄 License
+Project Atlas is licensed under the <a href="https://github.com/lucas-brisolla/goal-tracker/blob/main/LICENSE">MIT License</a>
