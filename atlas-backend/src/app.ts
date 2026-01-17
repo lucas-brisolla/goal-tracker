@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import  database  from './config/database';
 
 require('dotenv').config();
 
@@ -17,3 +18,16 @@ const PORT = process.env.PORT || 3333;
 app.listen (PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
+
+async function testConnection() {
+    try {
+        const client = await database.query('SELECT NOW()');
+        console.log('Database connection successful');
+        console.log('Current time from DB:', client.rows[0].now);
+        console.log('Version running:', client.rows[0]);
+    } catch (err) {
+        if (err instanceof Error) {
+            console.error('Database connection error:', err.stack);
+        }
+    }
+}
