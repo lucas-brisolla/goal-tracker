@@ -5,9 +5,11 @@ import  database  from './config/database';
 require('dotenv').config();
 
 const app = express();
+const usersRoutes = require('./routes/users.routes');
 
 app.use(cors());
 app.use(express.json());
+app.use('/api', usersRoutes);
 
 app.get('/health', (req, res) =>{
     return res.json({status: 'ok', message: 'Atlas API running' });
@@ -31,3 +33,6 @@ async function testConnection() {
         }
     }
 }
+
+
+
