@@ -10,8 +10,12 @@ async function insertUser(email: string, password: string) {
             [email, hashedPassword]
         );
         return result.rows[0];
-    } catch (err) {
-        throw err;
+    } catch (err: any) {
+       if (err.code == '23505') {
+            throw new Error('Email already in use');
+       } else {
+            throw err;
+       }
     } finally {
         client.release();
     }

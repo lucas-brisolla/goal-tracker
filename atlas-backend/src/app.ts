@@ -1,15 +1,15 @@
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config';
 import  database  from './config/database';
+import routes from './routes/users.routes';
 
-require('dotenv').config();
 
 const app = express();
-const usersRoutes = require('./routes/users.routes');
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', usersRoutes);
+app.use('/api', routes);
 
 app.get('/health', (req, res) =>{
     return res.json({status: 'ok', message: 'Atlas API running' });
