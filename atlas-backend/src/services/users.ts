@@ -1,4 +1,4 @@
-import  database  from './config/database';
+import  database  from '../config/database';
 import bcrypt from 'bcrypt';
 
 async function insertUser(email: string, password: string) {
@@ -21,5 +21,18 @@ async function insertUser(email: string, password: string) {
     }
   };
 
-export default insertUser;
 
+async function findUserByEmail(email: string) {
+    const client = await database.connect();
+    try {
+        const result = await client.query(
+            'SELECT id, email, password_hash FROM users WHERE email = $1',
+            [email]
+        );
+        return result.rows[0];
+    } finally {
+        client.release();
+    }
+}
+
+export default { insertUser, findUserByEmail };
