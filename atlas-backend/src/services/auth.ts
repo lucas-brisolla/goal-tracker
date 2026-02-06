@@ -8,27 +8,22 @@ async function comparePassword(plainTextPassword: string, hashedPassword: string
 
 async function authenticateUser(email: string, password: string) {
     const user = await users.findUserByEmail(email);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const passwordMatch = await comparePassword(password, user.password_hash);
+    if (!passwordMatch) {
+        throw new Error('Invalid password');
+    }
     try {
-        if (user) {
-            const isPasswordValid = await comparePassword(password, user.password_hash);
-            if (isPasswordValid) {
-                return { id: user.id, email: user.email };
-                async function generateToken(user: any) {
-                    // Simulated token generation logic
-                    return `token-${user.id}`;
-                }
-            } else {
-                throw new Error('Credentials are invalid');
-            }
-        } else {
-            throw new Error('User not found');
-        }
+        const token = JWT.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET || 'default_secret', { expiresIn: '1h' });
+        return token;
     } catch (err) {
-        throw err;
+        throw new Error('Failed to generate token');        
     }
 }
 
-export default authenticateUser;
+export default {authenticateUser};
 
 
 
