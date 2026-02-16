@@ -6,15 +6,17 @@ import routes from './routes/users.routes';
 import sessionRoutes from './routes/sessions.routes';
 import authMiddleware from './middlewares/auth.middleware';
 import meRoutes from './routes/me.routes';
+import goalsRoutes from './routes/goals.routes';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use('/api', sessionRoutes);
-app.use(authMiddleware);
 app.use('/api', routes);
-app.use('/api', meRoutes);
+// Protected routes
+app.use('/api', authMiddleware, meRoutes);
+app.use('/api', authMiddleware, goalsRoutes);
 
 // Test database connection on startup
 testConnection();

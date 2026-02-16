@@ -16,7 +16,7 @@ async function authenticateUser(email: string, password: string) {
         throw new Error('Invalid password');
     }
     try {
-        const token = JWT.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET || 'default_secret', { expiresIn: '1h' });
+        const token = JWT.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET || 'default_secret', { expiresIn: '1h' });
         return token;
     } catch (err) {
         throw new Error('Failed to generate token');        
