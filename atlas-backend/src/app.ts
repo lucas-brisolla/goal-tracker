@@ -7,6 +7,8 @@ import sessionRoutes from './routes/sessions.routes';
 import authMiddleware from './middlewares/auth.middleware';
 import meRoutes from './routes/me.routes';
 import goalsRoutes from './routes/goals.routes';
+import { AppError } from './errors/AppError';
+import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 
@@ -45,4 +47,13 @@ async function testConnection() {
 }
 
 
+app.use ((err: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof AppError) {
+        return res.status(err.statusCode).json({ error: err.message });
+    }
+   if (err instanceof Error) {
+    return res.status(500).json({ error: err.message });
+    }
+    return res.status(500).json({ error: 'Internal Server Error' });
+});
 
