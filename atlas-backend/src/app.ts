@@ -56,4 +56,3 @@ app.use ((err: unknown, req: Request, res: Response, next: NextFunction) => {
     }
     return res.status(500).json({ error: 'Internal Server Error' });
 });
-

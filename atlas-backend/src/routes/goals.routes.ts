@@ -4,18 +4,16 @@ import authMiddleware from '../middlewares/auth.middleware';
 import { Request, Response } from 'express';
 import {GoalDTO, CreateGoalDTO, UpdateGoalDTO} from '../@types/dto';
 import { AppError } from '../errors/AppError';
+import { validate } from '../middlewares/validate';
+import { createGoalSchema, updateGoalSchema } from '../validators/goal.schema';
 
 const router = express.Router();
 
-router.post('/goals', authMiddleware, async (req: Request, res: Response) => {
+router.post('/goals', authMiddleware, validate(createGoalSchema), async (req: Request, res: Response) => {
     console.log('REQ.USER:', req.user);
 
     const userId = req.user.id;
     const { title, description }: CreateGoalDTO = req.body;
-
-    if (!title || !description) {
-        return res.status(400).json({ error: 'Title and description are required' });
-    }
 
     const newGoal = await goals.createGoal(userId, title, description);
     return res.status(201).json(newGoal);
