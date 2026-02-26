@@ -71,11 +71,47 @@ async function deleteGoal(goalId: string, userId: string): Promise<void> {
     }
 }
 
+async function completeGoal(goalId: string, userId: string): Promise<Goal> {
+    const client = await database.connect();
+    try {
+        const result = await client.query(
+            'UPDATE goals SET completed = TRUE, completed_at = CURRENT_TIMESTAMP WHERE id = $1 AND user_id = $2 RETURNING id, title, description, completed AS completed, completed_at',
+            [goalId, userId]
+        );
+        const goal = result.rows[0];
+        if (!goal) {
+            throw notFoundError('Goal not found');
+        }
+        return goal;
+    } finally {
+        client.release();
+    }
+}
+
+async function uncompleteGoal(goalId: string, userId: string): Promise<Goal> {
+    const client = await database.connect();
+    try {
+        const result = await client.query(
+            'UPDATE goals SET completed = FALSE, completed_at = NULL WHERE id = $1 AND user_id = $2 RETURNING id, title, description, completed AS completed, completed_at',
+            [goalId, userId]
+        );
+        const goal = result.rows[0];
+        if (!goal) {
+            throw notFoundError('Goal not found');
+        }
+        return goal;
+    } finally {
+        client.release();
+    }
+}
+
 
 export default { 
     createGoal, 
     listGoalsByUser,
     getGoalById,
     updateGoal,
-    deleteGoal
+    deleteGoal,
+    completeGoal,
+    uncompleteGoal
 };

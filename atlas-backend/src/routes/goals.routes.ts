@@ -3,7 +3,7 @@ import goals from '../services/goals';
 import authMiddleware from '../middlewares/auth.middleware';
 import { Request, Response } from 'express';
 import {GoalDTO, CreateGoalDTO, UpdateGoalDTO} from '../@types/dto';
-import { AppError } from '../errors/AppError';
+import { AppError, badRequestError } from '../errors/AppError';
 import { validate } from '../middlewares/validate';
 import { createGoalSchema, updateGoalSchema } from '../validators/goal.schema';
 
@@ -56,5 +56,21 @@ router.delete('/goals/:id', authMiddleware, async (req: Request, res: Response) 
     await goals.deleteGoal(goalId, userId);
     return res.status(204).send();
 });
+
+router.patch('/goals/:id/complete', authMiddleware, async (req: Request, res: Response) => {
+    const userId = req.user.id;
+    const goalId = req.params.id!;
+
+    const goal = await goals.completeGoal(goalId, userId);
+    return res.json(goal);
+});
+
+router.patch('/goals/:id/uncomplete', authMiddleware, async (req: Request, res: Response) => {
+    const userId = req.user.id;
+    const goalId = req.params.id!;
+
+    const goal = await goals.uncompleteGoal(goalId, userId);
+    return res.json(goal);
+}); 
 
 export default router;

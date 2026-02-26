@@ -9,6 +9,8 @@ import meRoutes from './routes/me.routes';
 import goalsRoutes from './routes/goals.routes';
 import { AppError } from './errors/AppError';
 import { Request, Response, NextFunction } from 'express';
+import dashboardRoutes from './routes/dashboard.routes';
+
 
 const app = express();
 
@@ -19,6 +21,7 @@ app.use('/api', routes);
 // Protected routes
 app.use('/api', authMiddleware, meRoutes);
 app.use('/api', authMiddleware, goalsRoutes);
+app.use('/api', authMiddleware, dashboardRoutes);
 
 // Test database connection on startup
 testConnection();
