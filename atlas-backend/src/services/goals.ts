@@ -19,7 +19,7 @@ async function listGoalsByUser(userId: string): Promise<Goal[]> {
     const client = await database.connect();
     try {
         const result = await client.query(
-            'SELECT id, title, description FROM goals WHERE user_id = $1',
+            'SELECT id, title, description, completed, completed_at FROM goals WHERE user_id = $1',
             [userId]
         );
         return result.rows;
@@ -32,7 +32,7 @@ async function getGoalById(goalId: string, userId: string): Promise<Goal> {
     const client = await database.connect();
     try {
         const result = await client.query(
-            'SELECT id, title, description FROM goals WHERE id = $1 AND user_id = $2',
+            'SELECT id, title, description, completed, completed_at FROM goals WHERE id = $1 AND user_id = $2',
             [goalId, userId]
         );
         const goal = result.rows[0];

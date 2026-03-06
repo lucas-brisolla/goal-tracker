@@ -37,17 +37,21 @@ function Dashboard() {
 
     async function toggleGoal(goal: any) {
         try {
-            if (goal.completed) {
-                await apiFetch(`/goals/${goal.id}/uncomplete`, {
+
+            const newStatus = !goal.completed;
+
+            if (newStatus) {
+                await apiFetch(`/goals/${goal.id}/complete`, {
                     method: 'PATCH'
                 });
             } else {
-                await apiFetch(`/goals/${goal.id}/complete`, {
+                await apiFetch(`/goals/${goal.id}/uncomplete`, {
                     method: 'PATCH'
                 });
             }
 
-            fetchGoals();
+           await fetchGoals();
+            await fetchDashboard();
 
         } catch (error) {
             console.error('Failed to toggle goal:', error);
