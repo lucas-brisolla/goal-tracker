@@ -1,16 +1,16 @@
 import { useEffect, useState} from 'react';
 import apiFetch from '../api/client';
-
-type DashboardData = { 
-    total: number;
-    completed: number;
-    pending: number;
-    completionRate: number;
-};
-
+import GoalForm from '../components/GoalForm';
+import GoalList from '../components/GoalList';
+import type { DashboardData } from '../types/dashboardData';
+import type { Goal } from '../types/goal';
+    
 function Dashboard() {
     const [data, setData] = useState<DashboardData | null>(null);
-     const [goals, setGoals] = useState([]);
+    const [goals, setGoals] = useState<Goal[]>([]);
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
 
     useEffect(() => {
         fetchDashboard();
@@ -18,44 +18,41 @@ function Dashboard() {
     }, []);
     
      async function fetchDashboard(){
-            try {
-                const result = await apiFetch('/dashboard');
-                setData(result);
-            } catch (error) {
-                console.error('Failed to fetch dashboard data:', error);
-            }    
-        } 
+        const result = await apiFetch('/dashboard');
+        setData(result);
+    } 
 
      async function fetchGoals() {
-        try {
-            const result = await apiFetch('/goals');
-            setGoals(result);
-        } catch (error) {
-            console.error('Failed to fetch goals:', error);
-        }
+        const result = await apiFetch('/goals');
+        setGoals(result);
     }
 
-    async function toggleGoal(goal: any) {
-        try {
+     async function createGoal(title: string, description: string) {;
+            await apiFetch('/goals', {
+                method: 'POST',
+                body: JSON.stringify({ title, description })
+            });
 
-            const newStatus = !goal.completed;
-
-            if (newStatus) {
-                await apiFetch(`/goals/${goal.id}/complete`, {
-                    method: 'PATCH'
-                });
-            } else {
-                await apiFetch(`/goals/${goal.id}/uncomplete`, {
-                    method: 'PATCH'
-                });
-            }
-
-           await fetchGoals();
+            await fetchGoals();
             await fetchDashboard();
+    }
 
-        } catch (error) {
-            console.error('Failed to toggle goal:', error);
+    async function toggleGoal(goal: Goal) {
+
+        const newStatus = !goal.completed;
+
+        if (newStatus) {
+            await apiFetch(`/goals/${goal.id}/complete`, {
+                method: 'PATCH'
+            });
+        } else {
+            await apiFetch(`/goals/${goal.id}/uncomplete`, {
+                method: 'PATCH'
+            });
         }
+
+        await fetchGoals();
+        await fetchDashboard();
     }
 
     if (!data) {
@@ -69,25 +66,11 @@ function Dashboard() {
         <p>Completed Goals: {data.completed}</p>
         <p>Pending Goals: {data.pending}</p>
         <p>Completion Rate: {data.completionRate}%</p>
+        <br />
+        <h2>Create New Goal</h2>
+        <GoalForm onCreate={createGoal} />
         <h2>Your Goals</h2>
-        <ul>
-            {goals.map((goal: any) => (
-                <li key={goal.id} style={{ marginBottom: "12px" }}>
-                    <input
-                        type="checkbox"
-                        checked={goal.completed}
-                        onChange={() => toggleGoal(goal)}
-                    />
-                    <span style={{ marginLeft: "8px", fontWeight: "bold" }}>
-                        {goal.title}
-                    </span>
-                    <br />
-                    <small style={{ color: "#aaa" }}>
-                        {goal.description}
-                    </small>
-                </li>
-            ))}
-        </ul>
+        <GoalList goals={goals} onToggle={toggleGoal} />
     </div>
     );
 }
