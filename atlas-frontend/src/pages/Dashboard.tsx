@@ -38,21 +38,41 @@ function Dashboard() {
     }
 
     async function toggleGoal(goal: Goal) {
+        try {
 
-        const newStatus = !goal.completed;
+            const newStatus = !goal.completed;
 
-        if (newStatus) {
-            await apiFetch(`/goals/${goal.id}/complete`, {
-                method: 'PATCH'
-            });
-        } else {
-            await apiFetch(`/goals/${goal.id}/uncomplete`, {
-                method: 'PATCH'
-            });
+            if (newStatus) {
+            await apiFetch(`/goals/${goal.id}/complete`, { method: 'PATCH' });
+            } else {
+            await apiFetch(`/goals/${goal.id}/uncomplete`, { method: 'PATCH' });
+            }
+
+            // atualiza estado local
+            setGoals((prevGoals) =>
+            prevGoals.map((g) =>
+                g.id === goal.id ? { ...g, completed: newStatus } : g
+            )
+            );
+
+            await fetchDashboard();
+
+        } catch (error) {
+            console.error("Failed to toggle goal:", error);
         }
+        }
+    async function deleteGoal(goalId: string) {
+       try{ 
+        await apiFetch(`/goals/${goalId}`, {
+            method: 'DELETE'
+        });
 
         await fetchGoals();
         await fetchDashboard();
+
+    } catch (error) {
+        console.error('Error deleting goal:', error);
+        }
     }
 
     if (!data) {
@@ -68,9 +88,13 @@ function Dashboard() {
         <p>Completion Rate: {data.completionRate}%</p>
         <br />
         <h2>Create New Goal</h2>
-        <GoalForm onCreate={createGoal} />
+        <GoalForm 
+        onCreate={createGoal} />
         <h2>Your Goals</h2>
-        <GoalList goals={goals} onToggle={toggleGoal} />
+        <GoalList 
+        goals={goals} 
+        onToggle={toggleGoal} 
+        onDelete={deleteGoal} />
     </div>
     );
 }

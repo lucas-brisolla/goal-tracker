@@ -16,7 +16,7 @@ function GoalForm({ onCreate }: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
             <input
                 type="text"
                 placeholder="Goal Title"
