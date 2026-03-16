@@ -1,78 +1,28 @@
-import { useEffect, useState} from 'react';
-import apiFetch from '../api/client';
 import GoalForm from '../components/GoalForm';
 import GoalList from '../components/GoalList';
-import type { DashboardData } from '../types/dashboardData';
+import useGoals from '../hooks/useGoals';
+import useDashboard from '../hooks/useDashboard';
 import type { Goal } from '../types/goal';
+
+
     
 function Dashboard() {
-    const [data, setData] = useState<DashboardData | null>(null);
-    const [goals, setGoals] = useState<Goal[]>([]);
+    const { goals, toggleGoal, deleteGoal, createGoal } = useGoals();
+    const { data, fetchDashboard } = useDashboard();
 
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-
-    useEffect(() => {
-        fetchDashboard();
-        fetchGoals();
-    }, []);
-    
-     async function fetchDashboard(){
-        const result = await apiFetch('/dashboard');
-        setData(result);
-    } 
-
-     async function fetchGoals() {
-        const result = await apiFetch('/goals');
-        setGoals(result);
-    }
-
-     async function createGoal(title: string, description: string) {;
-            await apiFetch('/goals', {
-                method: 'POST',
-                body: JSON.stringify({ title, description })
-            });
-
-            await fetchGoals();
-            await fetchDashboard();
-    }
-
-    async function toggleGoal(goal: Goal) {
-        try {
-
-            const newStatus = !goal.completed;
-
-            if (newStatus) {
-            await apiFetch(`/goals/${goal.id}/complete`, { method: 'PATCH' });
-            } else {
-            await apiFetch(`/goals/${goal.id}/uncomplete`, { method: 'PATCH' });
-            }
-
-            // atualiza estado local
-            setGoals((prevGoals) =>
-            prevGoals.map((g) =>
-                g.id === goal.id ? { ...g, completed: newStatus } : g
-            )
-            );
-
-            await fetchDashboard();
-
-        } catch (error) {
-            console.error("Failed to toggle goal:", error);
-        }
-        }
-    async function deleteGoal(goalId: string) {
-       try{ 
-        await apiFetch(`/goals/${goalId}`, {
-            method: 'DELETE'
-        });
-
-        await fetchGoals();
+    async function handleCreateGoal(title: string, description: string){
+        await createGoal(title, description);
         await fetchDashboard();
+    }
 
-    } catch (error) {
-        console.error('Error deleting goal:', error);
-        }
+    async function handleToggleGoal(goal: Goal) {
+        await toggleGoal(goal);
+        await fetchDashboard();
+    }
+
+    async function handleDeleteGoal(goalId: string){
+        await deleteGoal(goalId);
+        await fetchDashboard();
     }
 
     if (!data) {
@@ -89,12 +39,12 @@ function Dashboard() {
         <br />
         <h2>Create New Goal</h2>
         <GoalForm 
-        onCreate={createGoal} />
+        onCreate={handleCreateGoal} />
         <h2>Your Goals</h2>
         <GoalList 
         goals={goals} 
-        onToggle={toggleGoal} 
-        onDelete={deleteGoal} />
+        onToggle={handleToggleGoal} 
+        onDelete={handleDeleteGoal} />
     </div>
     );
 }
