@@ -24,3 +24,7 @@ export function badRequestError(message: string = 'Bad Request') {
 export function internalServerError(message: string = 'Internal Server Error') {
     return new AppError(message, 500);
 }
+
+export function AlreadyExists(message: string = 'User already has an objective'){
+    return new AppError(message, 409);
+}

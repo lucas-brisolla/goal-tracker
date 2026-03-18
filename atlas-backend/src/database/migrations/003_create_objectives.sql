@@ -1,0 +1,9 @@
+EXTENSION IF NOT EXISTS "uuid_ossp";
+
+CREATE TABLE IF NOT EXISTS objective(
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+)

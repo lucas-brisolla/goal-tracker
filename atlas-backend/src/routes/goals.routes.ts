@@ -13,9 +13,9 @@ router.post('/goals', authMiddleware, validate(createGoalSchema), async (req: Re
     console.log('REQ.USER:', req.user);
 
     const userId = req.user.id;
-    const { title, description }: CreateGoalDTO = req.body;
+    const { objectiveId, title, description }: CreateGoalDTO = req.body;
 
-    const newGoal = await goals.createGoal(userId, title, description);
+    const newGoal = await goals.createGoal(userId,objectiveId, title, description);
     return res.status(201).json(newGoal);
    
 });

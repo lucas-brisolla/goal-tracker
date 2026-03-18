@@ -1,12 +1,20 @@
 import database from '../config/database';
 import Goal from '../@types/goal';
+import objective from './objective';
 import { notFoundError } from '../errors/AppError';
 
-async function createGoal(userId: string, title: string, description: string): Promise<Goal> {
+async function createGoal(userId: string, objectiveId: string,  title: string, description: string): Promise<Goal> {
     const client = await database.connect();
+    const objective = await client.query(
+        'SELECT id FROM objective WHERE id = $1 AND user_id = $2',[objectiveId, userId]
+    );
+
+    if (objective.rows.length === 0){
+        throw notFoundError('Objective not found');
+    }
     try {
         const result = await client.query(
-            'INSERT INTO goals (user_id, title, description) VALUES ($1, $2, $3) RETURNING id, title, description',
+            'INSERT INTO goals (user_id, title, description) VALUES ($1, $2, $3, $4) RETURNING id, title, description',
             [userId, title, description]
         );
         return result.rows[0];

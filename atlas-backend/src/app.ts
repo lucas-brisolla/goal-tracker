@@ -6,6 +6,7 @@ import routes from './routes/users.routes';
 import sessionRoutes from './routes/sessions.routes';
 import authMiddleware from './middlewares/auth.middleware';
 import meRoutes from './routes/me.routes';
+import objectiveRoutes from './routes/objective.routes';
 import goalsRoutes from './routes/goals.routes';
 import { AppError } from './errors/AppError';
 import { Request, Response, NextFunction } from 'express';
@@ -20,6 +21,7 @@ app.use('/api', sessionRoutes);
 app.use('/api', routes);
 // Protected routes
 app.use('/api', authMiddleware, meRoutes);
+app.use('/api', authMiddleware, objectiveRoutes)
 app.use('/api', authMiddleware, goalsRoutes);
 app.use('/api', authMiddleware, dashboardRoutes);
 
