@@ -11,7 +11,7 @@ function useGoals(){
         setGoals(result);
     }
 
-    async function createGoal(title: string, description: string){
+    async function createGoal(objectiveId: string, title: string, description: string){
         await apiFetch("/goals",{
             method: "POST",
             body: JSON.stringify({title, description})

@@ -29,7 +29,14 @@ function GoalForm({ onCreate }: Props) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
             />
-            <button type="submit">Create Goal</button>
+            <button type="submit" style={{
+                marginTop: "10px",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                background: "#4ade80",
+                color: "#000",
+                fontWeight: "bold"
+            }}>+ Nova meta</button>
         </form>
     );
 }

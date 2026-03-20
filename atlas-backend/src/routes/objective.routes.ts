@@ -3,6 +3,7 @@ import { CreateObjectiveDTO } from '../@types/dto';
 import { Request, Response } from 'express';
 import express from 'express';
 import authMiddleware from '../middlewares/auth.middleware';
+import auth from '../services/auth';
 
 const router = express.Router();
 
@@ -15,6 +16,14 @@ router.post('/objective', authMiddleware, async (req: Request, res: Response) =>
     const newObjective = await objective.createObjective(userId, title, description);
     return res.status(201).json(newObjective);
 });
+
+router.get('/objective', authMiddleware, async (req: Request, res: Response) => {
+    const userId = req.user.id;
+    const get_objective = await objective.getObjective(userId);
+
+    return res.json(get_objective);
+    }
+)
 
 router.get('/objective:id', authMiddleware, async (req: Request, res: Response) =>{
     const userId = req.user.id;

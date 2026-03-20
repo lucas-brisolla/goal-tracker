@@ -1,7 +1,7 @@
 import database from '../config/database';
 import Goal from '../@types/goal';
 import objective from './objective';
-import { notFoundError } from '../errors/AppError';
+import { notFoundError, AlreadyExists } from '../errors/AppError';
 
 async function createGoal(userId: string, objectiveId: string,  title: string, description: string): Promise<Goal> {
     const client = await database.connect();
@@ -14,11 +14,12 @@ async function createGoal(userId: string, objectiveId: string,  title: string, d
     }
     try {
         const result = await client.query(
-            'INSERT INTO goals (user_id, title, description) VALUES ($1, $2, $3, $4) RETURNING id, title, description',
-            [userId, title, description]
+            'INSERT INTO goals (user_id, objective_id title, description) VALUES ($1, $2, $3, $4) RETURNING id, title, description',
+            [userId, objectiveId, title, description]
         );
         return result.rows[0];
-    } finally {
+    } 
+    finally {
         client.release();
     }
 }
