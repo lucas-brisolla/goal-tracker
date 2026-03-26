@@ -43,26 +43,17 @@ function Dashboard() {
     
     return (
     <div>
-            <div style={{ marginBottom: "40px" }}>
-                <h1 style={{ fontSize: "32px" }}>🎯 {objective.title}</h1>
+        <div className="bg-gray-900 rounded-xl p-6 shadow-md">
+            <div>
+                <h1 className="text-3xl font-bold text-white text-center mb-4">🎯 {objective.title}</h1>
                 <p style={{ color: "#aaa" }}>{objective.description}</p>
             </div>
         <h1>Sua Jornada</h1>
-        <div style={{
-                width: "300px",
-                height: "10px",
-                background: "#333",
-                borderRadius: "10px",
-                margin: "10px auto"
-            }}>
-                <div style={{
-                    width: `${data.completionRate}%`,
-                    height: "100%",
-                    background: "#4ade80",
-                    borderRadius: "10px"
-                }} />
+        <div className="w-full bg-gray-700 rounded-full h-4">
+                <div style={{width: `${data.completionRate}%`,}} className="bg-emerald-500 h-4 rounded-full transition-all duration-500 "/>
             </div>
-<p>{data.completionRate}% concluído</p>
+            <p>{data.completionRate}% concluído</p>
+        </div>
         <br />
         <h2>Defina suas metas</h2>
         <GoalForm 

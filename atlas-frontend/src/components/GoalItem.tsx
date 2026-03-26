@@ -8,11 +8,7 @@ type Props = {
 
 function GoalItem({ goal, onToggle, onDelete }: Props) {
     return (
-        <li style={{
-            marginBottom: "16px",
-            padding: "12px",
-            borderRadius: "8px",
-            background: goal.completed ? "#1e293b" : "#111",
+        <li className="flex items-center justify-between p-4 bg-gray-800/50 border-1-4 border-transparent " style={{
             opacity: goal.completed ? 0.6 : 1
         }}>
             <input 
@@ -21,9 +17,9 @@ function GoalItem({ goal, onToggle, onDelete }: Props) {
             onChange={() => {
                 onToggle(goal); 
                 alert("✔ missão avançada")
-            }}
+            }} 
              />
-            <span style={{ marginLeft: "8px", fontWeight: "bold" }}>
+            <span className="text-gray-200 font-medium" style={{textDecoration: goal.completed ? "line-through" : 1}}>
                 {goal.title}
             </span>
             <button
