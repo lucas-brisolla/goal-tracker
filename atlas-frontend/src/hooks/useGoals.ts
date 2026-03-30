@@ -3,6 +3,7 @@ import apiFetch from "../api/client";
 import type { Goal } from "../types/goal";
 import useDashboard from "./useDashboard";
 
+
 function useGoals(){
     const [goals, setGoals] = useState<Goal[]>([]);
     
@@ -14,7 +15,7 @@ function useGoals(){
     async function createGoal(objectiveId: string, title: string, description: string){
         await apiFetch("/goals",{
             method: "POST",
-            body: JSON.stringify({title, description})
+            body: JSON.stringify({title, description, objectiveId})
         });
 
         fetchGoals();

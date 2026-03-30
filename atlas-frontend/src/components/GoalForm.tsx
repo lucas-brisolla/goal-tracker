@@ -1,42 +1,40 @@
 import { useState } from 'react';
+import useObjective from '../hooks/useObjective';
 
 type Props = {
-    onCreate: (title: string, description: string) =>Promise<void>;
+    onCreate: (title: string, objectiveId: string, description: string) =>Promise<void>;
 }
 
 function GoalForm({ onCreate }: Props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const objectiveId = useObjective().objective?.id || '';
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        await onCreate(title, description);
+        await onCreate(title, description, objectiveId);
         setTitle('');
         setDescription('');
     }
 
     return (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
+        <form onSubmit={handleSubmit} >
             <input
+                className='w-full mb-2 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-green-500 transition-all focus:outline-none'
                 type="text"
-                placeholder="Goal Title"
+                placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
             />
             <textarea
-                placeholder="Goal Description"
+                className='w-full mb-3 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-green-500 transition-all focus:outline-none resize-none'
+                placeholder="Description"
                 value={description}
+                
                 onChange={(e) => setDescription(e.target.value)}
             />
-            <button type="submit" style={{
-                marginTop: "10px",
-                padding: "10px 20px",
-                borderRadius: "8px",
-                background: "#4ade80",
-                color: "#000",
-                fontWeight: "bold"
-            }}>+ Nova meta</button>
+            <button type="submit" className='w-full bg-green-500 hover:bg-green-600 transition-all p-3 rounded-lg font-semibold shadow-lg shadow-green-500/20 focus:outline-none'>+ Nova meta</button>
         </form>
     );
 }
