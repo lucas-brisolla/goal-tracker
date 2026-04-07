@@ -9,7 +9,7 @@ type Props = {
 
 function GoalList({ goals, onToggle, onDelete }: Props) {
     return (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ul className="relative text-decoration-none ">
             {goals.map(goal => (
                 <GoalItem 
                 key={goal.id} 

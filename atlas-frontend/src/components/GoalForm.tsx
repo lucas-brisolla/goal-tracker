@@ -12,7 +12,7 @@ function GoalForm({ onCreate }: Props) {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        await onCreate(title, description, objectiveId);
+        await onCreate(objectiveId, title, description);
         setTitle('');
         setDescription('');
     }
@@ -20,7 +20,7 @@ function GoalForm({ onCreate }: Props) {
     return (
         <form onSubmit={handleSubmit} >
             <input
-                className='w-full mb-2 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-green-500 transition-all focus:outline-none'
+                className='w-full mb-2 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-blue-500 transition-all focus:outline-none'
                 type="text"
                 placeholder="Title"
                 value={title}
@@ -28,13 +28,13 @@ function GoalForm({ onCreate }: Props) {
                 required
             />
             <textarea
-                className='w-full mb-3 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-green-500 transition-all focus:outline-none resize-none'
+                className='w-full mb-3 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-blue-500 transition-all focus:outline-none resize-none'
                 placeholder="Description"
                 value={description}
                 
                 onChange={(e) => setDescription(e.target.value)}
             />
-            <button type="submit" className='w-full bg-green-500 hover:bg-green-600 transition-all p-3 rounded-lg font-semibold shadow-lg shadow-green-500/20 focus:outline-none'>+ Nova meta</button>
+            <button type="submit" className='w-full bg-blue-500 hover:bg-blue-600 transition-all p-3 rounded-lg font-semibold shadow-lg shadow-blue-500/20 focus:outline-none'>+ Nova meta</button>
         </form>
     );
 }
