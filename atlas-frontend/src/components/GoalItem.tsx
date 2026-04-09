@@ -1,4 +1,6 @@
 import type { Goal } from '../types/goal';
+import { Trash2 } from 'lucide-react';
+import Check from './Check';
 
 type Props = {
     goal: Goal;
@@ -8,14 +10,15 @@ type Props = {
 
 function GoalItem({ goal, onToggle, onDelete }: Props) {
     return (
-        <li className="relative pl-8 mb-6">
+        <li className="relative pl-8 mb-6 hover:scale-[1.01] hover:shadow-lg
+transition-all duration-300">
 
-            <div className="absolute left-3 top-0 bottom-0 w-[2px] bg-zinc-800" />
+            <div className="absolute left-3 top-0 bottom-0 w-0.5  bg-blue-500 scale-110 shadow-[0_0_10px_rgba(59,130,246,0.7)]" />
 
 
             <div className={`
-                absolute left-[6px] top-6 w-3 h-3 rounded-full
-                ${goal.completed ? "bg-blue-500" : "bg-zinc-600"}
+                absolute left-1.5 top-6 w-3 h-3 rounded-full
+                ${goal.completed ? "bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.7)]" : "bg-zinc-600"}
             `} />
 
 
@@ -29,16 +32,11 @@ function GoalItem({ goal, onToggle, onDelete }: Props) {
 
                 <div className="flex items-start justify-between gap-4">
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
 
                         <button
                             onClick={() => onToggle(goal)}
-                            className={`
-                                w-6 h-6 rounded-full border-2 flex items-center justify-center
-                                ${goal.completed ? "bg-blue-500 border-blue-500" : "border-zinc-500"}
-                            `}
-                        >
-                            {goal.completed ? "✓" : ""}
+                        ><Check checked={goal.completed}></Check>
                         </button>
 
                         <div>
@@ -60,7 +58,7 @@ function GoalItem({ goal, onToggle, onDelete }: Props) {
                         onClick={() => onDelete(goal.id)}
                         className="text-red-500 hover:text-red-700 text-sm"
                     >
-                        delete
+                        <Trash2 className='w-5 h-5'></Trash2>
                     </button>
 
                 </div>

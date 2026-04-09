@@ -8,9 +8,15 @@ type Props = {
 }
 
 function GoalList({ goals, onToggle, onDelete }: Props) {
+    const sortedGoals = [...goals].sort((a, b) => {
+        if (a.completed === b.completed) {
+            return 0;
+        }
+        return a.completed ? 1 : -1;
+    });
     return (
         <ul className="relative text-decoration-none ">
-            {goals.map(goal => (
+            {sortedGoals.map(goal => (
                 <GoalItem 
                 key={goal.id} 
                 goal={goal} 
