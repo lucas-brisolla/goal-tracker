@@ -101,3 +101,16 @@ npm install
 
 # Run project
 npm run dev
+
+🤝 Contributing
+
+Contributions, ideas, and feedback are welcome.
+
+If you have suggestions or want to collaborate, feel free to open an issue.
+
+📬 Contact
+Email: lucasabrisolla@gmail.com
+LinkedIn: (add here depois)
+📄 License
+
+This project is licensed under the MIT License.
