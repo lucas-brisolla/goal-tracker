@@ -2,27 +2,15 @@ import database from '../config/database';
 import Goal from '../@types/goal';
 import objective from './objective';
 import { notFoundError, AlreadyExists } from '../errors/AppError';
+import categoryPreset from '../utils/categoryPreset';
 
-async function createGoal(userId: string, title: string, description: string): Promise<Goal> {
+async function createGoal(userId: string, title: string, description: string, category: string, objectiveId: string): Promise<Goal> {
     const client = await database.connect();
     
     try {
-        const objectiveResult = await client.query(
-            'SELECT id FROM objective WHERE user_id = $1 LIMIT 1', 
-            [userId]
-        );
-
-        const activeObjective = objectiveResult.rows[0];
-
-        if (!activeObjective) {
-            throw notFoundError('Você precisa criar um objetivo antes de adicionar metas.');
-        }
-        
-        const foundObjectiveId = activeObjective.id;
-
         const result = await client.query(
-            'INSERT INTO goals (user_id, objective_id, title, description) VALUES ($1, $2, $3, $4) RETURNING id, title, objective_id, description',
-            [userId, foundObjectiveId, title, description]
+            'INSERT INTO goals (user_id, objective_id, title, description, category) VALUES ($1, $2, $3, $4, $5) RETURNING id, title, objective_id, description, category',
+            [userId, objectiveId, title, description, category]
         );
         return result.rows[0];
     } finally {
@@ -34,7 +22,7 @@ async function listGoalsByUser(userId: string): Promise<Goal[]> {
     const client = await database.connect();
     try {
         const result = await client.query(
-            'SELECT id, objective_id, title, description, completed, completed_at FROM goals WHERE user_id = $1',
+            'SELECT id, objective_id, title, description, completed, completed_at, category FROM goals WHERE user_id = $1',
             [userId]
         );
         return result.rows;
@@ -47,7 +35,7 @@ async function getGoalById(goalId: string, userId: string): Promise<Goal> {
     const client = await database.connect();
     try {
         const result = await client.query(
-            'SELECT id, title, description, completed, completed_at FROM goals WHERE id = $1 AND user_id = $2',
+            'SELECT id, title, description, completed, completed_at, category FROM goals WHERE id = $1 AND user_id = $2',
             [goalId, userId]
         );
         const goal = result.rows[0];
@@ -120,6 +108,33 @@ async function uncompleteGoal(goalId: string, userId: string): Promise<Goal> {
     }
 }
 
+async function getSkillsData(userId: string) {
+    const goals = await listGoalsByUser(userId);
+    const categoriesMap: Record<string, { total: number; done: number }> = {};
+
+    for (const goal of goals) {
+        const cat = goal.category || "Geral";
+        if (!categoriesMap[cat]){
+            categoriesMap[cat] = { total: 0, done: 0 }; 
+        }
+        categoriesMap[cat].total += 1;
+        if (goal.completed) {
+            categoriesMap[cat].done += 1;
+        }
+    }
+
+    const skills = Object.entries(categoriesMap).map(([skill, data]) =>{
+        const level = data.total === 0 ? 0 : (data.done / data.total) * 100;
+        return {
+            skill,
+            level: Math.round(level)
+        };
+    });
+
+    return skills; 
+    
+}
+
 
 export default {
     createGoal,
@@ -128,5 +143,6 @@ export default {
     updateGoal,
     deleteGoal,
     completeGoal,
-    uncompleteGoal
+    uncompleteGoal, 
+    getSkillsData
 };

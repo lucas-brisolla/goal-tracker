@@ -11,9 +11,9 @@ router.use (express.json())
 
 router.post('/objective', authMiddleware, async (req: Request, res: Response) =>{
     const userId = req.user.id;
-    const {title, description} : CreateObjectiveDTO = req.body
+    const {title, description, categories} : CreateObjectiveDTO = req.body
 
-    const newObjective = await objective.createObjective(userId, title, description);
+    const newObjective = await objective.createObjective(userId, title, description, categories);
     return res.status(201).json(newObjective);
 });
 
@@ -32,5 +32,13 @@ router.get('/objective:id', authMiddleware, async (req: Request, res: Response) 
     const get_objective = await objective.getObjectiveById(objectiveId, userId);
     return res.json(get_objective);
 });
+
+router.get('/objective/:id/title', authMiddleware, async (req: Request, res: Response) => {
+    const userId = req.user.id;
+    const objectiveId = req.params.id!;
+
+    const title = await objective.getObjectiveTitleById(objectiveId, userId);
+    return res.json({ title });
+}); 
 
 export default router;

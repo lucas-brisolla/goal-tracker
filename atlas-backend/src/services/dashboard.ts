@@ -1,5 +1,6 @@
 import database from '../config/database';
 import Dashboard from '../@types/Dashboard';
+import goals from './goals';
 
 
 async function getDashboard(userId: string): Promise<Dashboard> {
@@ -20,15 +21,21 @@ async function getDashboard(userId: string): Promise<Dashboard> {
         const completed = Number(data.completed_goals);
         const pending = Number(data.pending_goals);
         const completionRate = total === 0 ? 0 : Math.round(completed / total * 100);
+        const skills = await goals.getSkillsData(userId);
         return {
             total,
             completed,
             pending,
-            completionRate
+            completionRate,
+            skills
         };
-    } finally {
+        } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+                throw new Error('Failed to fetch dashboard data');
+        } finally {
         client.release();
-    }
+    };
+  
 }
 
 export default {

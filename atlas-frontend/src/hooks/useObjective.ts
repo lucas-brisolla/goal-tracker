@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import apiFetch from "../api/client";
 import type { Objective } from "../types/objective";
+import useCategories from "./useCategories";
 
 function useObjective(){
     const [objective, setObjective] = useState<Objective | null>(null);
@@ -17,10 +18,11 @@ function useObjective(){
         }
     }
 
-    async function createObjective(title: string, description: string){
+
+    async function createObjective(title: string, description: string, categories: string []){
         const result = await apiFetch("/objective",{
             method: "POST",
-            body: JSON.stringify({ title, description })
+            body: JSON.stringify({ title, description, categories })
         });
         setObjective(result);
     }

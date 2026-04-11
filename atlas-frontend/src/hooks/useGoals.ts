@@ -12,10 +12,18 @@ function useGoals(){
         setGoals(result);
     }
 
-    async function createGoal(objectiveId: string, title: string, description: string){
+    async function createGoal(
+        title: string, 
+        objectiveId: string, 
+        description: string, 
+        category: string){
         await apiFetch("/goals",{
             method: "POST",
-            body: JSON.stringify({title, description, objectiveId})
+            body: JSON.stringify({
+                title, 
+                objectiveId, 
+                description, 
+                category}),
         });
 
         fetchGoals();

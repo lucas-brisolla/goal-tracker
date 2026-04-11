@@ -7,8 +7,8 @@ function GoalCreation() {
     const { fetchDashboard } = useDashboard();
 
 
-    async function handleCreate(objectiveId: string, title: string, description: string) {
-        await createGoal(objectiveId, title, description);
+    async function handleCreate(title: string, objectiveId: string, description: string, category: string) {
+        await createGoal(title, objectiveId, description, category);
         await fetchDashboard();
     }
 

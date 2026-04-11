@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage';
 import Goals from './pages/Goals';
 import GoalCreation from './pages/GoalCreation';
 import Progress from './pages/Progress';
+import CreateObjective from './pages/CreateObjective';
 import { useState } from 'react';
 import Login from './pages/Login';
 

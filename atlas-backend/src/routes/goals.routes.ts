@@ -1,8 +1,8 @@
 import express from 'express';
-import goals from '../services/goals'; 
+import goals from '../services/goals';
 import authMiddleware from '../middlewares/auth.middleware';
 import { Request, Response } from 'express';
-import {GoalDTO, CreateGoalDTO, UpdateGoalDTO} from '../@types/dto';
+import { GoalDTO, CreateGoalDTO, UpdateGoalDTO } from '../@types/dto';
 import { AppError, badRequestError } from '../errors/AppError';
 import { validate } from '../middlewares/validate';
 import { createGoalSchema, updateGoalSchema } from '../validators/goal.schema';
@@ -13,11 +13,16 @@ router.post('/goals', authMiddleware, validate(createGoalSchema), async (req: Re
     console.log('REQ.USER:', req.user);
 
     const userId = req.user.id;
-    const { title, description }: CreateGoalDTO = req.body;
+    const { title, description, category, objectiveId }: CreateGoalDTO = req.body;
 
-    const newGoal = await goals.createGoal(userId, title, description);
+    if (!category) {
+        return res.status(400).json({ error: "Category is required" });
+    }
+
+    const newGoal = await goals.createGoal(userId, title, description, category, objectiveId);
+    
     return res.status(201).json(newGoal);
-   
+
 });
 
 router.get('/goals', authMiddleware, async (req: Request, res: Response) => {
@@ -33,7 +38,7 @@ router.get('/goals/:id', authMiddleware, async (req: Request, res: Response) => 
 
     const goal = await goals.getGoalById(goalId, userId);
     return res.json(goal);
-    
+
 });
 
 router.put('/goals/:id', authMiddleware, async (req: Request, res: Response) => {
@@ -52,7 +57,7 @@ router.put('/goals/:id', authMiddleware, async (req: Request, res: Response) => 
 router.delete('/goals/:id', authMiddleware, async (req: Request, res: Response) => {
     const userId = req.user.id;
     const goalId = req.params.id!;
-    
+
     await goals.deleteGoal(goalId, userId);
     return res.status(204).send();
 });
@@ -71,6 +76,17 @@ router.patch('/goals/:id/uncomplete', authMiddleware, async (req: Request, res: 
 
     const goal = await goals.uncompleteGoal(goalId, userId);
     return res.json(goal);
-}); 
+});
+
+router.get('/skills', authMiddleware, async (req: Request, res: Response) => {
+    try {
+        const userId = req.user.id;
+
+        const skills = await goals.getSkillsData(userId);
+        return res.json(skills);
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 export default router;

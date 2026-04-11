@@ -2,6 +2,7 @@ export interface CreateGoalDTO {
     objectiveId: string;
     title: string;
     description: string;
+    category: string;
 }
 
 export interface UpdateGoalDTO {
@@ -13,9 +14,11 @@ export interface GoalDTO {
     id: string;
     title: string;
     description: string;
+    category: string;
 }
 
 export interface CreateObjectiveDTO{
     title: string;
     description: string;
+    categories: string[];
 }

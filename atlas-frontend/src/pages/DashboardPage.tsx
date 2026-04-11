@@ -64,7 +64,7 @@ function DashboardPage() {
             <StatsCard data={data} goals={goals} />
 
             <div className="grid grid-cols-2 gap-6">
-                <SkillsRadar />
+                <SkillsRadar data={data} />
                 <div className="bg-zinc-900 p-2 h-full rounded-xl border border-zinc-800 flex flex-col justify-center items-center hover:scale-[1.01] hover:shadow-lg transition-all duration-300  col-span-2">
 
                     <p className="text-zinc-500 text-sm">Insight</p>
@@ -78,7 +78,7 @@ function DashboardPage() {
                 </div>
 
             </div>
-
+                    
         </div>
     );
 }
