@@ -1,52 +1,103 @@
-# Goal Tracker
+# 🚀 Atlas — Goal Tracking Platform
+
 **Code name:** Project Atlas
 
-A web platform that helps people organize personal and professional goals by breaking down big objectives into small steps, tracking real progress, and encouraging continuous reflection.
+Atlas is a web platform designed to help people turn goals into real progress.
 
-This project was born from a real personal pain: the difficulty of defining goals and creating a realistic, efficient path to achieve them.
+Instead of just listing tasks, it breaks down objectives into structured steps, tracks performance, and provides visual insights into personal growth.
+
+---
+
+## ✨ Why this project exists
+
+This project was born from a real problem:
+
+> It's easy to set goals.  
+> It's hard to follow through.
+
+Atlas was built to solve that — creating a system that encourages consistency, clarity, and measurable progress.
+
+---
+
+## 🧠 Core Features
+
+- 🎯 **Dynamic Goal System**
+  - Create objectives and break them into actionable goals
+  - Categories adapt based on the user’s objective
+
+- 📊 **Real-Time Dashboard**
+  - Progress tracking
+  - Consistency tracking (streaks)
+  - Daily performance (goals/day)
+
+- 🧭 **Skills Radar Chart**
+  - Visual representation of user growth
+  - Based on real completed goals
+  - Fully dynamic (changes per objective)
+
+- 🧩 **Smart Categorization**
+  - Categories generated based on objective context
+  - Supports different life areas (e.g. programming, finance, etc.)
+
+- ⚡ **Fullstack Integration**
+  - Frontend + Backend fully connected
+  - Real data flow (no mock data)
 
 ---
 
 ## 🛠 Tech Stack
-- **Front-end:** React + TypeScript + TailwindCSS  
-- **Back-end:** Node.js  
+
+- **Frontend:** React + TypeScript + TailwindCSS  
+- **Backend:** Node.js + Express  
 - **Database:** PostgreSQL  
 - **Authentication:** JWT  
-- **Deploy:** To be defined  
 
 ---
 
-## 🚀 Current Status
-**Version:** 1.0  
-**Status:** In development
+## 📸 Preview
+
+> (Add screenshots here — this is VERY important)
+
+### Dashboard
+![Dashboard](./docs/dashboard.png)
+
+### Goals System
+![Goals](./docs/goals.png)
+
+### Skills Radar
+![Radar](./docs/radar.png)
 
 ---
 
-## 📌 Planned Features (v1)
-- User authentication (sign up / login)
-- Create goals
-- Split goals into smaller steps
-- Track progress
-- Simple dashboard
+## 🚧 Current Status
+
+**Version:** 1.0 (in progress)
+
+This project is actively being developed with new features focused on intelligence and user engagement.
 
 ---
 
-## 📖 How to Use
-Coming soon.
+## 🔮 Next Steps
+
+- 🧠 AI-assisted goal suggestions (SMART methodology)
+- 🏆 XP & reward system
+- ✅ Goal validation system (proof-based completion)
+- 📈 Advanced analytics
 
 ---
 
-## 🤝 Contributing
-Contributions are welcome!  
-Feel free to open issues, suggest improvements, or submit pull requests.
+## 🧪 Local Setup
 
----
+```bash
+# Clone repository
+git clone https://github.com/lucas-brisolla/goal-tracker.git
 
-## 📬 Contact
-- Email: lucasabrisolla@gmail.com  
-- WhatsApp: +55 (14) 99125-2831  
+# Install dependencies
+cd atlas-frontend
+npm install
 
----
+cd ../atlas-backend
+npm install
 
-## 📄 License
-Project Atlas is licensed under the <a href="https://github.com/lucas-brisolla/goal-tracker/blob/main/LICENSE">MIT License</a>
+# Run project
+npm run dev
