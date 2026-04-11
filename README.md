@@ -56,8 +56,6 @@ Atlas was built to solve that — creating a system that encourages consistency,
 
 ## 📸 Preview
 
-> (Add screenshots here — this is VERY important)
-
 ### Dashboard
 ![Dashboard](./docs/dashboard.png)
 
