@@ -120,4 +120,4 @@ LinkedIn: https://www.linkedin.com/in/lucas-a-brisolla
 
 - 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the <a href="https://github.com/lucas-brisolla/goal-tracker/blob/main/LICENSE">MIT License</a>
