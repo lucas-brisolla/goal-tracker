@@ -3,4 +3,9 @@ export type DashboardData = {
     completed: number;
     pending: number;
     completionRate: number;
+    skills: {
+        skill: string, 
+        level: number}[];
+    xp: number;
+    level: number;
 }

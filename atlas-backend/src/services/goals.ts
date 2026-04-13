@@ -2,7 +2,9 @@ import database from '../config/database';
 import Goal from '../@types/goal';
 import objective from './objective';
 import { notFoundError, AlreadyExists } from '../errors/AppError';
+import user from './users';
 import categoryPreset from '../utils/categoryPreset';
+import calculateLevel from '../utils/levelSystem';
 
 async function createGoal(userId: string, title: string, description: string, category: string, objectiveId: string): Promise<Goal> {
     const client = await database.connect();
@@ -76,11 +78,19 @@ async function deleteGoal(goalId: string, userId: string): Promise<void> {
 
 async function completeGoal(goalId: string, userId: string): Promise<Goal> {
     const client = await database.connect();
+    const xpGain = 10;
+    
+    const userResult = await client.query('SELECT xp FROM users WHERE id = $1',[userId]);
+    const currentXp = userResult.rows[0].xp
+    const newXp = currentXp + xpGain;
+    const newLevel = calculateLevel(newXp);
+
     try {
         const result = await client.query(
             'UPDATE goals SET completed = TRUE, completed_at = CURRENT_TIMESTAMP WHERE id = $1 AND user_id = $2 RETURNING id, title, description, completed AS completed, completed_at',
             [goalId, userId]
         );
+        await client.query('UPDATE users SET xp = $1, level = $2 WHERE id = $3', [newXp, newLevel, userId]);
         const goal = result.rows[0];
         if (!goal) {
             throw notFoundError('Goal not found');
@@ -99,6 +109,7 @@ async function uncompleteGoal(goalId: string, userId: string): Promise<Goal> {
             [goalId, userId]
         );
         const goal = result.rows[0];
+        await client.query('UPDATE users SET xp = xp - 10 WHERE id = $1', [userId]);
         if (!goal) {
             throw notFoundError('Goal not found');
         }

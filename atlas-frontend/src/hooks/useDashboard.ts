@@ -9,13 +9,14 @@ function useDashboard(){
         
         const result = await apiFetch("/dashboard");
         setData(result);
+        
     }
 
     useEffect(() =>{
         fetchDashboard();
     }, []);
 
-    return { data, fetchDashboard };
+    return { data, fetchDashboard ,};
 }
 
 export default useDashboard;

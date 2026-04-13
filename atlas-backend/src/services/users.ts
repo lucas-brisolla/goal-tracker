@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import { AppError, badRequestError, internalServerError, notFoundError } from '../errors/AppError';
 import User from '../@types/user';
 
+
+
 async function insertUser(email: string, password: string): Promise<User>{
     const client = await database.connect();
     try {
@@ -41,4 +43,4 @@ async function findUserByEmail(email: string) : Promise<User> {
     }
 }
 
-export default { insertUser, findUserByEmail };
+export default { insertUser, findUserByEmail};

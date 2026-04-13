@@ -39,7 +39,7 @@
     "verbatimModuleSyntax": false,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "moduleResolution": "node",
+    "moduleResolution": "node10",
     "skipLibCheck": true,
     "esModuleInterop": true
   }

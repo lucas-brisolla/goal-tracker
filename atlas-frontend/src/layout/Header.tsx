@@ -4,6 +4,7 @@ import useDashboard from "../hooks/useDashboard";
 import { useEffect } from "react";
 import { Target, Rocket, Hand } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import useGoals from "../hooks/useGoals";
 
 
 function Header() {
@@ -35,7 +36,10 @@ function Header() {
       <h1 className="text-zinc-400 text-sm flex items-center gap-1">
         Bem-vindo de volta <Hand></Hand>
       </h1>
-      
+      <div>
+        <h1 className="text-zinc-400 text-sm flex items-center gap-1">Level {JSON.stringify(data.level)}</h1>
+        <span className="text-xs text-zinc-500 flex items-center gap-1 uppercase tracking-wide">XP : {JSON.stringify(data.xp)}/300</span>
+      </div>
       <span className="text-xs text-zinc-500 flex items-center gap-1 uppercase tracking-wide">
         Continue sua jornada <Rocket></Rocket>
       </span>

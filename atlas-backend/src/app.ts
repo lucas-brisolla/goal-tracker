@@ -16,22 +16,25 @@ import dashboardRoutes from './routes/dashboard.routes';
 
 const app = express();
 
+
+
 app.use(cors());
 app.use(express.json());
 app.use('/api', sessionRoutes);
 app.use('/api', routes);
 // Protected routes
+app.use('/api', authMiddleware, dashboardRoutes);
 app.use('/api', authMiddleware, meRoutes);
 app.use('/api', authMiddleware, objectiveRoutes)
 app.use('/api', authMiddleware, goalsRoutes);
-app.use('/api', authMiddleware, dashboardRoutes);
 app.use('/api', authMiddleware, categoryRoutes);
 
 // Test database connection on startup
 testConnection();
 
 app.get('/health', (req, res) =>{
-    return res.json({status: 'ok', message: 'Atlas API running' });
+    console.log("healt check beated")
+    return res.json({status: 'ok', message: 'Atlas API running, correct back-end' });
 });
 
 const PORT = process.env.PORT || 3333;

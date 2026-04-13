@@ -10,6 +10,7 @@ router.get('/dashboard', authMiddleware, async (req: Request, res: Response) => 
 
     try {
         const dashboard = await dashboardService.getDashboard(userId);
+        console.log("API RESPONSE: ", dashboard)
         return res.json(dashboard);
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
