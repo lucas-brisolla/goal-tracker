@@ -3,9 +3,11 @@ interface Dashboard {
     completed: number;
     pending: number;
     completionRate: number; // Percentage of completed goals
-    skills: any;
+    skills: any; // Data for skills radar chart
     xp : number;
-    level: number; // Data for skills radar chart
+    level: number;
+    streak: number;
+    rhythm: number; 
 }
 
 export default Dashboard;

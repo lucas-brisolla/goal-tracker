@@ -4,7 +4,7 @@ interface Goal {
     objective_id: string;
     description: string;
     completed: boolean;
-    completedAt: Date | null;
+    completed_at?: Date | null;
     category: string;
 }
 

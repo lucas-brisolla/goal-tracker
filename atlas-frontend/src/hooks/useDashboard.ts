@@ -9,7 +9,7 @@ function useDashboard(){
         
         const result = await apiFetch("/dashboard");
         setData(result);
-        
+        console.log(result)
     }
 
     useEffect(() =>{

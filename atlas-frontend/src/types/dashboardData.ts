@@ -8,4 +8,6 @@ export type DashboardData = {
         level: number}[];
     xp: number;
     level: number;
+    consistency: number;
+    rhythm: number;
 }
