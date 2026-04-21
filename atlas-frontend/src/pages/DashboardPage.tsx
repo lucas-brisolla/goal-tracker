@@ -10,6 +10,7 @@ function DashboardPage() {
     const { data } = useDashboard();
     const { objective } = useObjective();
     const { goals } = useGoals();
+    const getInsight = getFeedback(data?.completionRate);
 
     if (!objective) return <p>Carregando objetivo...</p>;
     if (!data) return <p>Carregando progresso...</p>;
@@ -70,11 +71,8 @@ function DashboardPage() {
                     <p className="text-zinc-500 text-sm">Insight</p>
 
                     <p className="text-white mt-2 text-center">
-                        {data.completionRate < 30 && "Você começou, continue 💪"}
-                        {data.completionRate >= 30 && data.completionRate < 70 && "Bom progresso 🚀"}
-                        {data.completionRate >= 70 && "Você está voando 🔥"}
+                        {getInsight}
                     </p>
-
                 </div>
 
             </div>
