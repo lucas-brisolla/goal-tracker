@@ -1,3 +1,6 @@
+import useDashboard from "../hooks/useDashboard";
+
+
 function getFeedback(rate: any){
     if(rate < 20) return "Você começou, continue 🚀";
     if(rate < 50) return "Você está no caminho certo! 🌟";
