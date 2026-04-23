@@ -10,4 +10,7 @@ export type DashboardData = {
     level: number;
     consistency: number;
     rhythm: number;
+    xpNextLevel: number;
+    xpInLevel: number;
+    xpNeeded: number;
 }

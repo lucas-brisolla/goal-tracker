@@ -15,6 +15,7 @@ function Header() {
   const [animatedXp, setAnimatedXp] = useState(0);
   const [highlight, setHightlight] = useState(false);
 
+
   useEffect(() => {
     function handleUpdate() {
       fetchDashboard();
@@ -44,6 +45,9 @@ function Header() {
 
   if (!data) return <p>Loading...</p>;
 
+  Math.min((data.xp / data.xpNextLevel) * 100, 100);
+  
+
   if (isDashboard) {
     return (
       <header className="h-16 px-6 flex items-center justify-between bg-zinc-950 border-b border-zinc-800 transition-all duration-300 backdrop-blur-md">
@@ -52,10 +56,10 @@ function Header() {
           <div className="px-3 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-xs text-blue-400">Lv. {JSON.stringify(data.level)}</div>
           <div className="w-48">
             <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-              <div className="h-full rounded-full transition-all duration-700 ease-out bg-linear-to-r from-purple-500 via-blue-500 to-cyan-400 shadow-[0_0_10px_rgba(59,130,246,0.7)]" style={{ width: `${animatedXp / 300 * 100}%` }}></div>
+              <div className="h-full rounded-full transition-all duration-700 ease-out bg-linear-to-r from-purple-500 via-blue-500 to-cyan-400 shadow-[0_0_10px_rgba(59,130,246,0.7)]" style={{ width: `${(data.xpInLevel/ data.xpNeeded) * 100}%` }}></div>
             </div>
           </div>
-          <span className="text-xs text-zinc-400 flex items-center justify-center gap-1  tracking-wide"> Faltam <strong className="text-blue-400">{300 - data.xp} XP </strong> para o próximo NÍVEL</span>
+          <span className="text-xs text-zinc-400 flex items-center justify-center gap-1  tracking-wide"> Faltam <strong className="text-blue-400">{data.xpNeeded - data.xpInLevel} XP </strong> para o próximo NÍVEL</span>
         </div>
         <h1 className="text-zinc-400 text-sm flex items-center gap-1">
           Bem-vindo de volta <Hand></Hand>
@@ -80,10 +84,10 @@ shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300">
 
         <div className="w-48">
           <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-            <div className="h-full rounded-full transition-all duration-700 ease-out bg-linear-to-r from-purple-500 via-blue-500 to-cyan-400 shadow-[0_0_10px_rgba(59,130,246,0.7)]" style={{ width: `${animatedXp / 300 * 100}%` }}></div>
+            <div className="h-full rounded-full transition-all duration-700 ease-out bg-linear-to-r from-purple-500 via-blue-500 to-cyan-400 shadow-[0_0_10px_rgba(59,130,246,0.7)]" style={{ width: `${(data.xpInLevel / data.xpNeeded) * 100}%` }}></div>
           </div>
         </div>
-        <span className="text-xs text-zinc-400 flex items-center justify-center gap-1  tracking-wide"> Faltam <strong className="text-blue-400">{300 - data.xp} XP </strong> para o próximo NÍVEL</span>
+        <span className="text-xs text-zinc-400 flex items-center justify-center gap-1  tracking-wide"> Faltam <strong className="text-blue-400">{data.xpNeeded - data.xpInLevel} XP </strong> para o próximo NÍVEL</span>
       </div>
        
       <div>

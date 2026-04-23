@@ -1,6 +1,7 @@
 import database from '../config/database';
 import Dashboard from '../@types/Dashboard';
 import goals from './goals';
+import levelSystem from '../utils/levelSystem';
 
 
 async function getDashboard(userId: string): Promise<Dashboard> {
@@ -45,9 +46,13 @@ async function getDashboard(userId: string): Promise<Dashboard> {
         const completionRate = total === 0 ? 0 : Math.round(completed / total * 100);
         const xp = Number(userData.xp ?? 0);
         const level = Number(userData.level ?? 1);
+        const xpPrevLevel = levelSystem.xpToNextLevel(level);
+        const xpNextLevel = levelSystem.xpToNextLevel(level + 1);
+        const xpInLevel = Math.max(0, xp - xpPrevLevel);
+        const xpNeeded = Math.max(1, xpNextLevel - xpPrevLevel);
         const skills = await goals.getSkillsData
             (userId);
-            
+
         // streak set
         const completedGoals = getGoals.filter(g => g.completed && g.completed_at);
         const daysSet = new Set(
@@ -64,6 +69,15 @@ async function getDashboard(userId: string): Promise<Dashboard> {
         // rhythm set
         const totalCompleted = completedGoals.length;
         const rhythm = totalCompleted / 7;
+
+        console.log({
+            xp,
+            level,
+            xpPrevLevel,
+            xpNextLevel,
+            xpInLevel: xp - xpPrevLevel,
+            xpNeeded: xpNextLevel - xpPrevLevel
+        });
         return {
             total,
             completed,
@@ -73,7 +87,10 @@ async function getDashboard(userId: string): Promise<Dashboard> {
             xp,
             level,
             streak,
-            rhythm
+            rhythm,
+            xpNextLevel,
+            xpInLevel,
+            xpNeeded
         };
     } catch (error) {
         console.error('Error fetching dashboard data:', error);

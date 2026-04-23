@@ -7,7 +7,10 @@ interface Dashboard {
     xp : number;
     level: number;
     streak: number;
-    rhythm: number; 
+    rhythm: number;
+    xpNextLevel: number; 
+    xpInLevel: number;
+    xpNeeded: number;
 }
 
 export default Dashboard;
