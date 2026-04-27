@@ -8,8 +8,8 @@ import { useEffect } from "react";
 function Goals() {
     const { goals, toggleGoal, deleteGoal } = useGoals();
     const { fetchDashboard } = useDashboard();
-     async function handleToggleGoal(goal: Goal) {
-            await toggleGoal(goal);
+     async function handleToggleGoal(goal: Goal, validation?: string) {
+            await toggleGoal(goal, validation);
             window.dispatchEvent(new Event("dashboardUpdated"));
             await fetchDashboard();
         }

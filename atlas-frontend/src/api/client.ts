@@ -10,7 +10,7 @@ async function apiFetch(endpoint: string, options: RequestInit = {}){
            ...options.headers,
         },
     });
-
+    console.log("body: ", options.body)
     if (response.status === 401) {
         localStorage.removeItem('token');
         window.location.reload();

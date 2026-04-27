@@ -3,11 +3,13 @@ export interface CreateGoalDTO {
     title: string;
     description: string;
     category: string;
+    validation: string;
 }
 
 export interface UpdateGoalDTO {
     title: string;
     description: string;
+    validation: string;
 }
 
 export interface GoalDTO {
@@ -15,6 +17,7 @@ export interface GoalDTO {
     title: string;
     description: string;
     category: string;
+    validation: string;
 }
 
 export interface CreateObjectiveDTO{

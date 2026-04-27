@@ -29,21 +29,23 @@ function useGoals(){
         fetchGoals();
     }
 
-    async function toggleGoal(goal: Goal){
+    async function toggleGoal(goal: Goal, validation?: string){
         const newStatus = !goal.completed;
 
         if (newStatus) {
-            await apiFetch(`/goals/${goal.id}/complete`, {method:"PATCH"})
+            await apiFetch(`/goals/${goal.id}/complete`, {
+                method:"PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify({ validation })
+            });
+            console.log("CALLED TOGGLE ", { goal, validation })
         } else {
             await apiFetch(`/goals/${goal.id}/uncomplete`, {method: "PATCH"})
         }
 
-
-        setGoals(prev =>
-            prev.map(g => 
-                g.id === goal.id ? { ...g, completed: newStatus } : g
-        )
-      );
+       await fetchGoals();
     }
     
     async function deleteGoal(goalId: string) {

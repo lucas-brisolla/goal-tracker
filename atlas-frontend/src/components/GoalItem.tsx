@@ -1,15 +1,38 @@
 import type { Goal } from '../types/goal';
 import { Trash2 } from 'lucide-react';
 import Check from './Check';
+import { useState } from 'react';
 
 type Props = {
     goal: Goal;
-    onToggle: (goal: Goal) => Promise<void>;
+    onToggle: (goal: Goal, validation?: string) => Promise<void>;
     onDelete: (goalId: string) => Promise<void>;
 }
 
 function GoalItem({ goal, onToggle, onDelete }: Props) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [validation, setValidation] = useState('');
+
+    async function handleConfirm() {
+        if (!validation || validation.length < 10) {
+            alert('Descreva melhor sua conclusão.');
+            return;
+        }
+
+        try {
+            await onToggle(goal, validation);
+        } catch (error) {
+            console.error('Error completing goal:', error);
+        } finally {
+            setIsOpen(false);
+            setValidation('');
+            console.log("VALIDATION: ", validation);
+            console.log("GOAL: ", goal);
+            window.dispatchEvent(new Event('goalUpdated'));
+        }
+    }
     return (
+        <>
         <li className="relative pl-8 mb-6 hover:scale-[1.01] hover:shadow-lg
 transition-all duration-300">
 
@@ -35,7 +58,13 @@ transition-all duration-300">
                     <div className="flex gap-4">
 
                         <button
-                            onClick={() => onToggle(goal)}
+                            onClick={() => {
+                                if (goal.completed) {
+                                    onToggle(goal);
+                                } else {
+                                    setIsOpen(true);
+                                }
+                            }}
                         ><Check checked={goal.completed}></Check>
                         </button>
 
@@ -64,8 +93,41 @@ transition-all duration-300">
                 </div>
 
             </div>
+            
         </li>
+        {isOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded-lg w-full max-w-md">
+                    <h2 className="text-xl font-bold mb-4">Validate Goal Completion</h2>
+                    <p className="mb-4">Please provide validation for completing the goal:</p>
+                    <textarea
+                        value={validation}
+                        onChange={(e) => setValidation(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded mb-4"
+                        rows={4}
+                    />
+                    <div className="flex justify-end gap-2">
+                        <button
+                            onClick={() => {
+                                setIsOpen(false);
+                                setValidation('');
+                            }}
+                            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleConfirm}
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                            Validate
+                        </button>
+                    </div>
+                </div>
+            </div>)}
+            </>
     );
 }
+
 
 export default GoalItem;

@@ -65,8 +65,15 @@ router.delete('/goals/:id', authMiddleware, async (req: Request, res: Response) 
 router.patch('/goals/:id/complete', authMiddleware, async (req: Request, res: Response) => {
     const userId = req.user.id;
     const goalId = req.params.id!;
+    const { validation } = req.body;
+    
+    console.log(req.body)
+    
+    if (!validation || validation.length < 10) {
+        return res.status(400).json({ error: 'Validation must be at least 10 characters long' });
+    }
 
-    const goal = await goals.completeGoal(goalId, userId);
+    const goal = await goals.completeGoal(goalId, userId, validation);
     return res.json(goal);
 });
 

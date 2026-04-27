@@ -3,7 +3,7 @@ import type { Goal } from '../types/goal';
 
 type Props = {
     goals: Goal[];
-    onToggle: (goal: Goal) => Promise<void>;
+    onToggle: (goal: Goal, validation?: string) => Promise<void>;
     onDelete: (goalId: string) => Promise<void>;
 }
 

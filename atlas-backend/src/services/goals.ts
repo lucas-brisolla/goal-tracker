@@ -2,15 +2,14 @@ import database from '../config/database';
 import Goal from '../@types/goal';
 import objective from './objective';
 import { notFoundError, AlreadyExists } from '../errors/AppError';
-import user from './users';
-import categoryPreset from '../utils/categoryPreset';
+
 import levelSystem from '../utils/levelSystem';
 async function createGoal(userId: string, title: string, description: string, category: string, objectiveId: string): Promise<Goal> {
     const client = await database.connect();
     
     try {
         const result = await client.query(
-            'INSERT INTO goals (user_id, objective_id, title, description, category) VALUES ($1, $2, $3, $4, $5) RETURNING id, title, objective_id, description, category',
+            'INSERT INTO goals (user_id, objective_id, title, description, category, validation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, title, objective_id, description, category',
             [userId, objectiveId, title, description, category]
         );
         return result.rows[0];
@@ -75,7 +74,7 @@ async function deleteGoal(goalId: string, userId: string): Promise<void> {
     }
 }
 
-async function completeGoal(goalId: string, userId: string): Promise<Goal> {
+async function completeGoal(goalId: string, userId: string, validation: string): Promise<Goal> {
 
     // Connect database
     const client = await database.connect();
@@ -104,8 +103,8 @@ async function completeGoal(goalId: string, userId: string): Promise<Goal> {
     // Update Goal
     try {
         const result = await client.query(
-            'UPDATE goals SET completed = TRUE, completed_at = CURRENT_TIMESTAMP WHERE id = $1 AND user_id = $2 RETURNING id, title, description, completed AS completed, completed_at',
-            [goalId, userId]
+            'UPDATE goals SET completed = TRUE, completed_at = CURRENT_TIMESTAMP, validation = $3 WHERE id = $1 AND user_id = $2 RETURNING id, title, description, completed AS completed, completed_at, validation',
+            [goalId, userId, validation]
         );
 
         // Update user

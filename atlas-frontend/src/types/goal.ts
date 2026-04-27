@@ -4,4 +4,5 @@ export type Goal = {
     objectiveId: string;
     description: string;
     completed: boolean;
+    validation?: string;
 };
