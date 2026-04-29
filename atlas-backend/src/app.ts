@@ -9,6 +9,7 @@ import meRoutes from './routes/me.routes';
 import objectiveRoutes from './routes/objective.routes';
 import goalsRoutes from './routes/goals.routes';
 import categoryRoutes from './routes/categories.routes';
+import achievementsRoutes from './routes/achievements.routes';
 import { AppError } from './errors/AppError';
 import { Request, Response, NextFunction } from 'express';
 import dashboardRoutes from './routes/dashboard.routes';
@@ -28,7 +29,7 @@ app.use('/api', authMiddleware, meRoutes);
 app.use('/api', authMiddleware, objectiveRoutes)
 app.use('/api', authMiddleware, goalsRoutes);
 app.use('/api', authMiddleware, categoryRoutes);
-
+app.use('/api', authMiddleware, achievementsRoutes);
 // Test database connection on startup
 testConnection();
 

@@ -97,7 +97,7 @@ transition-all duration-300">
         </li>
         {isOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white p-6 rounded-lg w-full max-w-md">
+                <div className="bg-zinc-800 p-6 rounded-lg w-full max-w-md">
                     <h2 className="text-xl font-bold mb-4">Validate Goal Completion</h2>
                     <p className="mb-4">Please provide validation for completing the goal:</p>
                     <textarea

@@ -4,9 +4,10 @@ import objective from './objective';
 import { notFoundError, AlreadyExists } from '../errors/AppError';
 
 import levelSystem from '../utils/levelSystem';
+import { randomUUID } from 'crypto';
 async function createGoal(userId: string, title: string, description: string, category: string, objectiveId: string): Promise<Goal> {
     const client = await database.connect();
-    
+
     try {
         const result = await client.query(
             'INSERT INTO goals (user_id, objective_id, title, description, category, validation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, title, objective_id, description, category',
@@ -74,6 +75,67 @@ async function deleteGoal(goalId: string, userId: string): Promise<void> {
     }
 }
 
+
+async function getCompletedGoals(userId: string): Promise<number> {
+    const client = await database.connect();
+    try {
+        const result = await client.query(
+            'SELECT COUNT(*) FROM goals WHERE user_id = $1 AND completed = TRUE', [userId]
+        );
+        return Number(result.rows[0].count);
+    } finally {
+        client.release();
+    }
+}
+
+async function unlock(userId: string, achievementId: string): Promise<void> {
+    console.log("Unlocking achievement ", { userId, achievementId })
+    const client = await database.connect();
+
+    try {
+        const exists = await client.query('SELECT 1 FROM user_achievement WHERE user_id = $1 AND achievement_id = $2', [userId, achievementId]);
+        console.log("Achievement exists? ", exists.rows);
+        if (exists.rows.length > 0) return;
+
+        console.log("Inserting achievement ", { userId, achievementId })
+
+        await client.query('INSERT INTO user_achievement (id, user_id, achievement_id) VALUES ($1, $2, $3)', [randomUUID(), userId, achievementId]);
+    } finally {
+        client.release();
+    }
+}
+
+async function checkAchievements(userId: string, level: number): Promise<void> {
+    const ACHIEVEMENTS = {
+        FIRST_GOAL: '11111111-1111-1111-1111-111111111111',
+        FIVE_GOALS: '22222222-2222-2222-2222-222222222222',
+        TWENTY_GOALS: '33333333-3333-3333-3333-333333333333',
+        LEVEL_5: '44444444-4444-4444-4444-444444444444',
+    };
+    console.log("checkAchievements called")
+    const totalCompleted = await getCompletedGoals(userId);
+
+    if (totalCompleted >= 1) {
+        await unlock(userId, ACHIEVEMENTS.FIRST_GOAL);
+    }
+
+    if (totalCompleted >= 5) {
+        await unlock(userId, ACHIEVEMENTS.FIVE_GOALS);
+    }
+    if (totalCompleted >= 20) {
+        await unlock(userId, ACHIEVEMENTS.TWENTY_GOALS);
+    }
+    
+     const userResult = await database.query('SELECT xp FROM users WHERE id = $1', [userId]);
+     const currentXp = userResult.rows[0].xp ?? 0;
+     const currentLevel = levelSystem.calculateLevel(currentXp);
+    if (currentLevel >= 5) {
+        await unlock(userId, ACHIEVEMENTS.LEVEL_5);
+    }
+    console.log("checkAchievements finished", { totalCompleted })
+}
+
+
 async function completeGoal(goalId: string, userId: string, validation: string): Promise<Goal> {
 
     // Connect database
@@ -82,8 +144,8 @@ async function completeGoal(goalId: string, userId: string, validation: string):
     // Fetch Goal
     const goalResult = await client.query('SELECT title, description FROM goals WHERE id = $1 AND user_id = $2', [goalId, userId]);
     const goal = goalResult.rows[0];
-    
-    if (!goal){
+
+    if (!goal) {
         throw notFoundError('Goal not found')
     }
 
@@ -93,12 +155,19 @@ async function completeGoal(goalId: string, userId: string, validation: string):
     const xpWithBonus = levelSystem.applyStreakBonus(baseXp, streak);
 
     // Fetch current XP
-    const userResult = await client.query('SELECT xp FROM users WHERE id = $1',[userId]);
+    const userResult = await client.query('SELECT xp FROM users WHERE id = $1', [userId]);
 
     // Calculate XP with new XP and Level
     const currentXp = userResult.rows[0].xp ?? 0;
     const newXp = currentXp + xpWithBonus;
     const newLevel = levelSystem.calculateLevel(newXp);
+
+    console.log("completeGoal chamando")
+    // Check Achievements
+    await checkAchievements(userId, newLevel);
+
+    console.log("completeGoal terminou checkAchievements")
+
 
     // Update Goal
     try {
@@ -142,8 +211,8 @@ async function getSkillsData(userId: string) {
 
     for (const goal of goals) {
         const cat = goal.category || "Geral";
-        if (!categoriesMap[cat]){
-            categoriesMap[cat] = { total: 0, done: 0 }; 
+        if (!categoriesMap[cat]) {
+            categoriesMap[cat] = { total: 0, done: 0 };
         }
         categoriesMap[cat].total += 1;
         if (goal.completed) {
@@ -151,7 +220,7 @@ async function getSkillsData(userId: string) {
         }
     }
 
-    const skills = Object.entries(categoriesMap).map(([skill, data]) =>{
+    const skills = Object.entries(categoriesMap).map(([skill, data]) => {
         const level = data.total === 0 ? 0 : (data.done / data.total) * 100;
         return {
             skill,
@@ -159,9 +228,10 @@ async function getSkillsData(userId: string) {
         };
     });
 
-    return skills; 
-    
+    return skills;
+
 }
+
 
 
 export default {
@@ -171,6 +241,6 @@ export default {
     updateGoal,
     deleteGoal,
     completeGoal,
-    uncompleteGoal, 
+    uncompleteGoal,
     getSkillsData
 };

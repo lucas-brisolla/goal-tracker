@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import apiFetch from "../api/client";
 import type { Goal } from "../types/goal";
 import useDashboard from "./useDashboard";
+
+
 
 
 function useGoals(){
