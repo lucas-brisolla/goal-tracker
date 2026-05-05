@@ -13,7 +13,7 @@ import achievementsRoutes from './routes/achievements.routes';
 import { AppError } from './errors/AppError';
 import { Request, Response, NextFunction } from 'express';
 import dashboardRoutes from './routes/dashboard.routes';
-
+import aiRoutes from './routes/ai.routes';
 
 const app = express();
 
@@ -30,6 +30,7 @@ app.use('/api', authMiddleware, objectiveRoutes)
 app.use('/api', authMiddleware, goalsRoutes);
 app.use('/api', authMiddleware, categoryRoutes);
 app.use('/api', authMiddleware, achievementsRoutes);
+app.use('/api', authMiddleware, aiRoutes);
 // Test database connection on startup
 testConnection();
 

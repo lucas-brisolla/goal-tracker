@@ -14,6 +14,8 @@ function useGoals(){
         setGoals(result);
     }
 
+  
+
     async function createGoal(
         title: string, 
         objectiveId: string, 
