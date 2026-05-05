@@ -6,6 +6,7 @@ import { GoalDTO, CreateGoalDTO, UpdateGoalDTO } from '../@types/dto';
 import { AppError, badRequestError } from '../errors/AppError';
 import { validate } from '../middlewares/validate';
 import { createGoalSchema, updateGoalSchema } from '../validators/goal.schema';
+import ai  from '../services/AI';
 
 const router = express.Router();
 
@@ -14,6 +15,18 @@ router.post('/goals', authMiddleware, validate(createGoalSchema), async (req: Re
 
     const userId = req.user.id;
     const { title, description, category, objectiveId }: CreateGoalDTO = req.body;
+    const errorTitle = ai.validateGoal(title);
+    const errorDescription = ai.validateGoal(description);
+    
+
+    if (errorTitle) {
+        return res.status(400).json({ error: errorTitle });
+    }
+
+
+    if (errorDescription) {
+        return res.status(400).json({ error: errorDescription });
+    }
 
     if (!category) {
         return res.status(400).json({ error: "Category is required" });

@@ -50,8 +50,7 @@ async function getDashboard(userId: string): Promise<Dashboard> {
         const xpNextLevel = levelSystem.xpToNextLevel(level + 1);
         const xpInLevel = Math.max(0, xp - xpPrevLevel);
         const xpNeeded = Math.max(1, xpNextLevel - xpPrevLevel);
-        const skills = await goals.getSkillsData
-            (userId);
+        const skills = await goals.getSkillsData(userId);
 
         // streak set
         const completedGoals = getGoals.filter(g => g.completed && g.completed_at);

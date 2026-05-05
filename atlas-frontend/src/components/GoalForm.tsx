@@ -12,6 +12,8 @@ function GoalForm({ onCreate }: Props) {
     const [category, setCategory] = useState('');
     const {categories} = useCategories();
     const objectiveId = useObjective().objective?.id || '';
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (categories.length > 0) {
@@ -20,13 +22,27 @@ function GoalForm({ onCreate }: Props) {
     }, [categories]);
 
     async function handleSubmit(e: React.FormEvent) {
+        if(loading) return;
         e.preventDefault();
-        await onCreate(title, objectiveId, description, category);
-        setTitle('');
-        setDescription('');
+        try {
+            setLoading(true);
+            setError("");
+
+            await onCreate(title, objectiveId, description, category);
+            setTitle('');
+            setDescription('');
+
+        } catch (err: any) {
+            console.error('Error creating goal:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     }
+    
 
     return (
+         <>{error && (<div className='mb-4 p-3 bg-red-500 text-white rounded'>{error}</div>)}
         <form onSubmit={handleSubmit} >
             <input
                 className='w-full mb-2 p-3 rounded bg-zinc-900 border border-zinc-700 focus:border-blue-500 transition-all focus:outline-none'
@@ -55,9 +71,13 @@ function GoalForm({ onCreate }: Props) {
                     </option>
                 ))}
             </select>
-            <button type="submit" className='w-full bg-blue-500 hover:bg-blue-600 transition-all p-3 rounded-lg font-semibold shadow-lg shadow-blue-500/20 focus:outline-none'>+ Nova meta</button>
+            <button type="submit" className='w-full bg-blue-500 hover:bg-blue-600 transition-all p-3 rounded-lg font-semibold shadow-lg shadow-blue-500/20 focus:outline-none' disabled={loading}>
+                {loading ? 'Creating...' : '+ Nova meta'}
+            </button>
         </form>
+       </>
     );
 }
+
 
 export default GoalForm;

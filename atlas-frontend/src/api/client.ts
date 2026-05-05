@@ -17,11 +17,12 @@ async function apiFetch(endpoint: string, options: RequestInit = {}){
         throw new Error('Token expired. Please log in again.');
     } else if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'API request failed');
+        throw new Error(errorData.error || 'API request failed');
     }
     if (response.status === 204) {
         return null;
     }
+
     return response.json();
 }
 

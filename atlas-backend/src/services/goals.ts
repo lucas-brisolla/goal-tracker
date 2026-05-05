@@ -3,14 +3,16 @@ import Goal from '../@types/goal';
 import objective from './objective';
 import { notFoundError, AlreadyExists } from '../errors/AppError';
 
+
 import levelSystem from '../utils/levelSystem';
 import { randomUUID } from 'crypto';
+import { validate } from '../middlewares/validate';
 async function createGoal(userId: string, title: string, description: string, category: string, objectiveId: string): Promise<Goal> {
     const client = await database.connect();
 
     try {
         const result = await client.query(
-            'INSERT INTO goals (user_id, objective_id, title, description, category, validation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, title, objective_id, description, category',
+            'INSERT INTO goals (user_id, objective_id, title, description, category) VALUES ($1, $2, $3, $4, $5) RETURNING id, title, objective_id, description, category',
             [userId, objectiveId, title, description, category]
         );
         return result.rows[0];
