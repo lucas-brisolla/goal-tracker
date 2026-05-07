@@ -41,4 +41,20 @@ router.get('/objective/:id/title', authMiddleware, async (req: Request, res: Res
     return res.json({ title });
 }); 
 
+router.put('/objective/:id/complete', authMiddleware, async (req: Request, res: Response) =>{
+    const userId = req.user.id;
+    const objectiveId = req.params.id!;
+    const { validation } = req.body;
+
+    console.log(validation);
+    console.log(typeof validation);
+
+    if (!validation || validation.length < 30){
+        return res.status(400).json('Error. The validation must be at least 30 characteres long')
+    }
+
+    const objectiveCompleted = await objective.completeObjective(userId, objectiveId, validation);
+    return res.json(objectiveCompleted);
+})
+
 export default router;

@@ -254,5 +254,6 @@ export default {
     deleteGoal,
     completeGoal,
     uncompleteGoal,
+    getCompletedGoals,
     getSkillsData
 };

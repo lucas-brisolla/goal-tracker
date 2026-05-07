@@ -5,6 +5,8 @@ import StatsCard from "../components/StatsCard";
 import SkillsRadar from "../components/SkillsRadar";
 import getFeedback from "../components/GetFeedback";
 import useGoals from "../hooks/useGoals";
+import ObjectiveCard from "../components/ObjectiveCard";
+import CreateObjective from "./CreateObjective";
 
 function DashboardPage() {
     const { data } = useDashboard();
@@ -17,6 +19,11 @@ function DashboardPage() {
 
     return (
         <div className="p-3 space-y-3">
+            {!objective?.completed ? (
+                <ObjectiveCard />
+            ) : (
+                <CreateObjective />
+            )}
             <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-8 bg-zinc-900 p-6 rounded-xl border border-zinc-800 hover:scale-[1.01] hover:shadow-lg transition-all duration-300 min-h-35 flex flex-col justify-center items-center">
 
@@ -39,9 +46,10 @@ function DashboardPage() {
                             className="bg-linear-to-r from-blue-400 to-cyan-400 h-full transition-all duration-700 ease-out shadow-[0_0_10px_rgba(59,130,246,0.7)]"
                             style={{ width: `${data.completionRate}%` }}
                         />
+
                     </div>
 
-                   {/*  <p className="text-zinc-400 text-sm mt-2">
+                    {/*  <p className="text-zinc-400 text-sm mt-2">
                         {data.completionRate}% concluído
                     </p> */}
 
@@ -76,7 +84,7 @@ function DashboardPage() {
                 </div>
 
             </div>
-                    
+
         </div>
     );
 }

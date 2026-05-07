@@ -11,11 +11,17 @@ function useObjective(){
         try {
             const result = await apiFetch("/objective");
             setObjective(result);
+            if (!result){
+                setObjective(null);
+                console.log(result)
+                return;
+            }setObjective(result[0]);
         } catch {
             setObjective(null);
         } finally {
             setLoading(false);
         }
+        
     }
 
 
@@ -27,6 +33,25 @@ function useObjective(){
         setObjective(result);
     }
 
+    async function completeObjective(objective: Objective, validation?: string)/* : Promise<{feedback?: string}> */{
+        const newStatus = !objective.completed;
+
+        if(newStatus){
+            const result = await apiFetch(`/objective/${objective.id}/complete`,{
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ validation })
+            });
+            await fetchObjective();
+
+            return result;
+        } 
+
+      
+    }
+
     useEffect(() =>{
         fetchObjective();
     }, []);
@@ -34,7 +59,8 @@ function useObjective(){
     return {
         objective, 
         loading,
-        createObjective
+        createObjective,
+        completeObjective
     };
 }
 
