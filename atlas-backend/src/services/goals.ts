@@ -1,12 +1,14 @@
 import database from '../config/database';
 import Goal from '../@types/goal';
+import type CompleteGoalResponse from '../@types/CompleteGoalResponse';
 import objective from './objective';
 import { notFoundError, AlreadyExists } from '../errors/AppError';
-
-
 import levelSystem from '../utils/levelSystem';
 import { randomUUID } from 'crypto';
 import { validate } from '../middlewares/validate';
+import generateCompletionFeedback from './generateCompletionFeedback';
+
+
 async function createGoal(userId: string, title: string, description: string, category: string, objectiveId: string): Promise<Goal> {
     const client = await database.connect();
 
@@ -138,7 +140,7 @@ async function checkAchievements(userId: string, level: number): Promise<void> {
 }
 
 
-async function completeGoal(goalId: string, userId: string, validation: string): Promise<Goal> {
+async function completeGoal(goalId: string, userId: string, validation: string): Promise<CompleteGoalResponse> {
 
     // Connect database
     const client = await database.connect();
@@ -164,6 +166,14 @@ async function completeGoal(goalId: string, userId: string, validation: string):
     const newXp = currentXp + xpWithBonus;
     const newLevel = levelSystem.calculateLevel(newXp);
 
+    // Feedback 
+    const totalCompleted =  await getCompletedGoals(userId)
+    const feedback = generateCompletionFeedback(
+        streak,
+        xpWithBonus,
+        totalCompleted
+    )
+
     console.log("completeGoal chamando")
     // Check Achievements
     await checkAchievements(userId, newLevel);
@@ -180,11 +190,11 @@ async function completeGoal(goalId: string, userId: string, validation: string):
 
         // Update user
         await client.query('UPDATE users SET xp = $1, level = $2 WHERE id = $3', [newXp, newLevel, userId]);
-        const goal = result.rows[0];
-        if (!goal) {
+        const updatedGoal = result.rows[0];
+        if (!updatedGoal) {
             throw notFoundError('Goal not found');
         }
-        return goal;
+        return {goal: updatedGoal, feedback};
     } finally {
         client.release();
     }

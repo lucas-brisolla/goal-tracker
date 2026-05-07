@@ -33,11 +33,11 @@ function useGoals(){
         fetchGoals();
     }
 
-    async function toggleGoal(goal: Goal, validation?: string){
+    async function toggleGoal(goal: Goal, validation?: string): Promise<{ feedback?: string}>{
         const newStatus = !goal.completed;
 
         if (newStatus) {
-            await apiFetch(`/goals/${goal.id}/complete`, {
+            const result = await apiFetch(`/goals/${goal.id}/complete`, {
                 method:"PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -45,10 +45,12 @@ function useGoals(){
                 body: JSON.stringify({ validation })
             });
             console.log("CALLED TOGGLE ", { goal, validation })
+            return result;
         } else {
             await apiFetch(`/goals/${goal.id}/uncomplete`, {method: "PATCH"})
+            return {};
         }
-
+        
        await fetchGoals();
     }
     

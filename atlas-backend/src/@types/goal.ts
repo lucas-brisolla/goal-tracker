@@ -7,7 +7,9 @@ interface Goal {
     completed_at?: Date | null;
     category: string;
     validation: string;
+    feedback: string;
 }
+
 
 interface categoryPreset {
     getCategoryPreset: (objectiveTitle: string) => string[];

@@ -29,8 +29,11 @@ function Goals() {
     }
 
      async function handleToggleGoal(goal: Goal, validation?: string) {
-            await toggleGoal(goal, validation);    
+            await toggleGoal(goal, validation);   
 
+            const result = await toggleGoal(goal, validation);
+            alert(result.feedback)
+            
             const newList = await fetchAchievements();
 
             checkNewAchievements(newList);
